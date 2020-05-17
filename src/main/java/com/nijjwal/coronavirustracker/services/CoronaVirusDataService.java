@@ -1,13 +1,17 @@
 package com.nijjwal.coronavirustracker.services;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
+import java.io.Reader;
 import java.net.URL;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.io.input.BOMInputStream;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,9 +22,10 @@ import org.springframework.stereotype.Service;
  */
 public class CoronaVirusDataService {
 
-	private static String US_VIRUS_DATA_URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv";
+	public static final String US_VIRUS_DATA_URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv";
 
 	@PostConstruct
+	@Scheduled(cron = "1 * * * * *")
 	/**
 	 * @PostConstruct annotation tells Spring, after you construct instance of this
 	 *                service execute this method.
@@ -28,39 +33,32 @@ public class CoronaVirusDataService {
 	 */
 	public void fetchVirusData() throws IOException {
 
-		// 1. Create URL
+		// 1. Create URL object
 		URL url = new URL(US_VIRUS_DATA_URL);
 
-		// 2. Create connection object and establish connection
-		HttpURLConnection connObjOnly = (HttpURLConnection) url.openConnection();
-		connObjOnly.setRequestMethod("GET");
+		// 2. Make a call to Git Repository and store data.
+		Reader reader = new InputStreamReader(new BOMInputStream(url.openStream()), "UTF-8");
+		Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(reader);
 
-		/*
-		 * 3. Execute the request using getResponseCode(), connect(), getInputStream()
-		 * or getOutputStream() methods.
-		 */
-		int responseCode = connObjOnly.getResponseCode();
-		BufferedReader inputReader = new BufferedReader(new InputStreamReader(connObjOnly.getInputStream()));
+		for (CSVRecord record : records) {
+			// 3. Get state/province name and city name
+			String state = record.get("Province_State");
+			String city = record.get("Admin2");
 
-		// 4. Read the response of the request and put it in a Content String
-		String inputLine;
-		StringBuffer content = new StringBuffer();
-		while ((inputLine = inputReader.readLine()) != null) {
-			content.append(inputLine);
-			content.append("\n");
+			/*
+			 * 4. Get the header name of the last column i.e. <<the latest date>> for which
+			 * the data is available
+			 */
+			List<String> listOfAllHeaderNamesForThisRecords = record.getParser().getHeaderNames();
+			String latestDate = listOfAllHeaderNamesForThisRecords.get(listOfAllHeaderNamesForThisRecords.size() - 1);
+
+			// 5. Based on the latest date column pull total number of confirmed cases.
+			String totalNumOfConfirmedCases = record.get(latestDate);
+
+			System.out.println("Current date and time: " + java.time.LocalDate.now() + " " + java.time.LocalTime.now()
+					+ "|State or Province: " + state + "|" + "City:" + city + "|" + "Total no of confirmed cases as of "
+					+ latestDate + ": " + totalNumOfConfirmedCases);
 		}
-		inputReader.close();
 
-		// 3. Close the connection using disconnect() method
-		connObjOnly.disconnect();
-
-		/*
-		 * 4. Print the response in the console. Note: By default console won't print
-		 * everything if there is a lot of data. Adjust your console setting accordingly
-		 * if you want to print everything on the console.
-		 */
-		System.out.println("Response from JHU:");
-		System.out.println(content);
-		System.out.println("Response Code is: " + responseCode);
 	}
 }
