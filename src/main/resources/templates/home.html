@@ -8,18 +8,20 @@
 </head>
 
 <body>
-	<table>
+	<table border="1px">
 		<tr>
-			<th>NAME</th>
-			<th>PRICE</th>
-			<th>IN STOCK</th>
+			<th>Date</th>
+			<th>Country</th>
+			<th>State/Province</th>
+			<th>City</th>
+			<th>Total no of confirmed cases</th>
 		</tr>
 		<tr th:each="locationStat : ${locationStats}">
-			<td th:text="${locationStat.date}"></td>
-			<td th:text="${locationStat.country}">2.41</td>
-			<td th:text="${locationStat.stateOrProvince}">Onions</td>
-			<td th:text="${locationStat.city}">2.41</td>
-			<td th:text="${locationStat.latestTotalCases}">2.41</td>
+			<td th:text="${locationStat.date}">-</td>
+			<td th:text="${locationStat.country}">-</td>
+			<td th:text="${locationStat.stateOrProvince}">-</td>
+			<td th:text="${locationStat.city}">-</td>
+			<td th:text="${locationStat.latestTotalCases}">0</td>
 		</tr>
 	</table>
 
