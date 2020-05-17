@@ -1,6 +1,7 @@
 package com.nijjwal.coronavirustracker.controllers;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
 
 	@GetMapping("/")
-	public String home() {
+	public String home(Model model) {
 		// Here home is the name of the template Thymeleaf maps to
+		model.addAttribute("fname", "Nijjwal");
+
 		return "home";
 	}
 }
