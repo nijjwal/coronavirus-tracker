@@ -1,8 +1,11 @@
 package com.nijjwal.coronavirustracker.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import com.nijjwal.coronavirustracker.services.CoronaVirusDataService;
 
 @Controller
 /**
@@ -15,10 +18,13 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 public class HomeController {
 
+	@Autowired
+	public CoronaVirusDataService locationStats;
+
 	@GetMapping("/")
 	public String home(Model model) {
 		// Here home is the name of the template Thymeleaf maps to
-		model.addAttribute("fname", "Nijjwal");
+		model.addAttribute("locationStats", locationStats.getAllStats());
 
 		return "home";
 	}

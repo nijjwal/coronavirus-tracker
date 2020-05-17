@@ -28,6 +28,14 @@ public class CoronaVirusDataService {
 	public static final String US_VIRUS_DATA_URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv";
 	private List<LocationStats> allStats = new ArrayList<>();
 
+	public List<LocationStats> getAllStats() {
+		return allStats;
+	}
+
+	public void setAllStats(List<LocationStats> allStats) {
+		this.allStats = allStats;
+	}
+
 	@PostConstruct
 	@Scheduled(cron = "1 * * * * *")
 	/**

@@ -8,8 +8,20 @@
 </head>
 
 <body>
-
-	<p th:text="${fname}"></p>
+	<table>
+		<tr>
+			<th>NAME</th>
+			<th>PRICE</th>
+			<th>IN STOCK</th>
+		</tr>
+		<tr th:each="locationStat : ${locationStats}">
+			<td th:text="${locationStat.date}"></td>
+			<td th:text="${locationStat.country}">2.41</td>
+			<td th:text="${locationStat.stateOrProvince}">Onions</td>
+			<td th:text="${locationStat.city}">2.41</td>
+			<td th:text="${locationStat.latestTotalCases}">2.41</td>
+		</tr>
+	</table>
 
 </body>
 
