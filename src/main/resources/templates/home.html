@@ -5,25 +5,31 @@
 <head>
 <title>Corona Virus Tracker</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+	integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	crossorigin="anonymous">
 </head>
 
 <body>
-	<table border="1px">
-		<tr>
-			<th>Date</th>
-			<th>Country</th>
-			<th>State/Province</th>
-			<th>City</th>
-			<th>Total no of confirmed cases</th>
-		</tr>
-		<tr th:each="locationStat : ${locationStats}">
-			<td th:text="${locationStat.date}">-</td>
-			<td th:text="${locationStat.country}">-</td>
-			<td th:text="${locationStat.stateOrProvince}">-</td>
-			<td th:text="${locationStat.city}">-</td>
-			<td th:text="${locationStat.latestTotalCases}">0</td>
-		</tr>
-	</table>
+	<div class="container">
+		<table class="table table-striped table-dark">
+			<tr>
+				<th>Date</th>
+				<th>Country</th>
+				<th>State/Province</th>
+				<th>City</th>
+				<th>Total no of confirmed cases</th>
+			</tr>
+			<tr th:each="locationStat : ${locationStats}">
+				<td th:text="${locationStat.date}">-</td>
+				<td th:text="${locationStat.country}">-</td>
+				<td th:text="${locationStat.stateOrProvince}">-</td>
+				<td th:text="${locationStat.city}">-</td>
+				<td th:text="${locationStat.latestTotalCases}">0</td>
+			</tr>
+		</table>
+	</div>
 
 </body>
 
